@@ -63,7 +63,6 @@
         theme = "robbyrussell";
         plugins = [
           "git"
-          "fast-syntax-highlighting"
         ];
       };
 
