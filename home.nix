@@ -37,6 +37,7 @@
     uv
     cargo
     zsh-autocomplete
+    colima
   ];
   
 
