@@ -37,7 +37,6 @@
     uv
     cargo
     zsh-autocomplete
-    fh #for easy flake making, aliased to np
   ];
   
 
@@ -69,7 +68,6 @@
       shellAliases = {
           cr = "cargo run";
           update = "home-manager switch";
-          np = "fh";
         };
 
       plugins = [
