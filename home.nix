@@ -38,6 +38,7 @@
     cargo
     zsh-autocomplete
     colima
+    gh
   ];
   
 
