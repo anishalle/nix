@@ -35,7 +35,7 @@
     git
     starship
     uv
-    cargo
+    rustup
     zsh-autocomplete
     gh
     colima
@@ -58,6 +58,14 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    initExtraFirst = ''
+      export PATH="$HOME/.local/bin:$PATH"
+    '';
+    initContent = ''
+      if [ -x "$HOME/.local/bin/wo" ]; then
+        source <("$HOME/.local/bin/wo" init zsh)
+      fi
+      '';
 
     oh-my-zsh = {
         enable = true;
@@ -83,7 +91,9 @@
             hash = "sha256-998rYEyYD67XleSDbqvnQptRrGuG2N2AgFvTpFWvoV8=";
           };
         }
+
       ];
+
   };
 
   programs.git = {
