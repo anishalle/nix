@@ -60,6 +60,7 @@
     syntaxHighlighting.enable = true;
     initExtraFirst = ''
       export PATH="$HOME/.local/bin:$PATH"
+      export PATH="$HOME/.config/emacs/bin:$PATH"
     '';
     initContent = ''
       if [ -x "$HOME/.local/bin/wo" ]; then
