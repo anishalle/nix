@@ -107,6 +107,9 @@
               name = "anishalle";
               email = "anish.alle11@gmail.com";
             };
+          github = {
+            user = "anishalle";
+          };
         };
     };
 
