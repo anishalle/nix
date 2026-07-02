@@ -22,6 +22,8 @@ RUN { \
     } >> /etc/nix/nix.conf
 
 COPY . /root/nix
+# don't trust the checkout's file mode (has been lost to cross-OS edits before)
+RUN chmod +x /root/nix/docker/entrypoint.sh
 
 # The base image pre-installs packages whose files collide with the
 # home-manager profile (coreutils-full vs coreutils, git-minimal vs git,
