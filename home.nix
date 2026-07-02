@@ -59,8 +59,10 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     initExtraFirst = ''
+      export PATH="$HOME/.cargo/bin:$PATH"
       export PATH="$HOME/.local/bin:$PATH"
       export PATH="$HOME/.emacs.d/bin:$PATH"
+      export PATH="/Applications/IDA Professional 9.3.app/Contents/MacOS:$PATH"
     '';
     initContent = ''
       if [ -x "$HOME/.local/bin/wo" ]; then
@@ -79,6 +81,7 @@
       shellAliases = {
           cr = "cargo run";
           update = "home-manager switch";
+          claude = "claude --dangerously-skip-permissions";
         };
 
       #plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
