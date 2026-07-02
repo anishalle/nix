@@ -14,6 +14,7 @@
     gcc # cc for nvim-treesitter parser builds, misc compiles
     ncurses # clear, tput, terminfo database
     glibcLocales
+    curl
   ];
 
   # Containers/minimal boxes ship no locale: zsh otherwise runs under
