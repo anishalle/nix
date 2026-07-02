@@ -18,6 +18,13 @@ RUN { \
     } >> /etc/nix/nix.conf
 
 COPY . /root/nix
-RUN nix build --no-link /root/nix#homeConfigurations.ani-container.activationPackage
+
+# The base image pre-installs packages whose files collide with the
+# home-manager profile (coreutils-full vs coreutils, git-minimal vs git,
+# man-db via programs.man, wget): remove them, then activate the home
+# config at build time so `docker run` starts fully set up.
+RUN nix-env -e coreutils-full wget git-minimal man-db && \
+    export USER=root HOME=/root && \
+    "$(nix build --no-link --print-out-paths /root/nix#homeConfigurations.ani-container.activationPackage)/activate"
 
 ENTRYPOINT ["/root/nix/docker/entrypoint.sh"]
