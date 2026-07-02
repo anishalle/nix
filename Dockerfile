@@ -33,4 +33,10 @@ RUN nix-env -e coreutils-full wget git-minimal man-db && \
     export USER=root HOME=/root && \
     "$(nix build --no-link --print-out-paths "/root/nix#homeConfigurations.ani-container-${TARGETARCH}.activationPackage")/activate"
 
+# Locale must be in the env before any shell starts (glibc caches the
+# archive lookup at process startup); also covers `docker exec` shells,
+# which bypass the entrypoint.
+ENV LANG=en_US.UTF-8 \
+    LOCALE_ARCHIVE=/root/.nix-profile/lib/locale/locale-archive
+
 ENTRYPOINT ["/root/nix/docker/entrypoint.sh"]
