@@ -12,19 +12,29 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
+      mkHome = system: modules:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.${system};
+          inherit modules;
+        };
     in
     {
-      homeConfigurations."ani" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      homeConfigurations = {
+        # macOS (this machine): `home-manager switch`
+        "ani" = mkHome "aarch64-darwin" [
+          ./modules/common.nix
+          ./modules/darwin.nix
+        ];
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ ./home.nix ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
+        # Cloud devbox: `home-manager switch --flake .#ani-linux-x86` (or -arm)
+        "ani-linux-x86" = mkHome "x86_64-linux" [
+          ./modules/common.nix
+          ./modules/linux.nix
+        ];
+        "ani-linux-arm" = mkHome "aarch64-linux" [
+          ./modules/common.nix
+          ./modules/linux.nix
+        ];
       };
     };
 }
