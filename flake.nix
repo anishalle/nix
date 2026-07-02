@@ -18,7 +18,10 @@
     let
       mkHome = system: modules:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           inherit modules;
         };
       # Docker devbox image (see Dockerfile): runs as root in the container.

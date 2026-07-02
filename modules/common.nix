@@ -65,6 +65,11 @@
   };
   xdg.configFile."starship.toml".source = ../configs/starship.toml;
 
+  # Unfree for ad-hoc CLI use (nix-env/nix-shell). Flake-based commands
+  # (nix shell/run nixpkgs#...) instead need NIXPKGS_ALLOW_UNFREE=1 --impure;
+  # packages inside this flake are covered by allowUnfree in flake.nix.
+  xdg.configFile."nixpkgs/config.nix".text = "{ allowUnfree = true; }\n";
+
   # Out-of-store symlink: ~/.config/nvim -> ~/nix/configs/nvim stays writable,
   # so LazyVim can update lazy-lock.json/lazyvim.json in place and edits apply
   # without a rebuild. Relies on the repo living at ~/nix on every machine.

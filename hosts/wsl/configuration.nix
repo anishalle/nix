@@ -8,6 +8,9 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # useGlobalPkgs means this also covers home-manager's packages.
+  nixpkgs.config.allowUnfree = true;
+
   users.users.ani = {
     isNormalUser = true;
     shell = pkgs.zsh;
