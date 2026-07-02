@@ -5,10 +5,13 @@ set -e
 export USER=root
 export HOME=/root
 
-# Activate the baked-in home-manager config on first start (instant: the
-# store paths were built into the image).
+# Fallback only — activation normally happens at image build (Dockerfile).
 if [ ! -e "$HOME/.nix-profile/bin/zsh" ]; then
-  "$(nix build --no-link --print-out-paths /root/nix#homeConfigurations.ani-container.activationPackage)/activate"
+  case "$(uname -m)" in
+    aarch64) ARCH=arm64 ;;
+    *) ARCH=amd64 ;;
+  esac
+  "$(nix build --no-link --print-out-paths "/root/nix#homeConfigurations.ani-container-${ARCH}.activationPackage")/activate"
 fi
 
 # `docker run image <cmd>` runs <cmd>; otherwise drop into the usual shell.

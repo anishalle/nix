@@ -21,6 +21,16 @@
           pkgs = nixpkgs.legacyPackages.${system};
           inherit modules;
         };
+      # Docker devbox image (see Dockerfile): runs as root in the container.
+      mkContainer = system:
+        mkHome system [
+          ./modules/common.nix
+          ./modules/linux.nix
+          ({ lib, ... }: {
+            home.username = lib.mkForce "root";
+            home.homeDirectory = lib.mkForce "/root";
+          })
+        ];
     in
     {
       homeConfigurations = {
@@ -40,15 +50,9 @@
           ./modules/linux.nix
         ];
 
-        # Docker devbox image (see Dockerfile): runs as root in the container.
-        "ani-container" = mkHome "x86_64-linux" [
-          ./modules/common.nix
-          ./modules/linux.nix
-          ({ lib, ... }: {
-            home.username = lib.mkForce "root";
-            home.homeDirectory = lib.mkForce "/root";
-          })
-        ];
+        # Devbox image variants, named to match docker's TARGETARCH values.
+        "ani-container-amd64" = mkContainer "x86_64-linux";
+        "ani-container-arm64" = mkContainer "aarch64-linux";
       };
 
       # WSL NixOS: `sudo nixos-rebuild switch --flake .#wsl`

@@ -1,12 +1,16 @@
-# Devbox image: nix + the ani-container home-manager config, pre-baked.
+# Devbox image: nix + the ani-container-* home-manager config, pre-baked.
+# Multi-arch: CI builds amd64 and arm64 natively and merges the manifests.
 #
 # Build:  docker build -t ghcr.io/anishalle/devbox .
 # Run:    docker run -it ghcr.io/anishalle/devbox
 #
 # The home config is built at image-build time so `docker run` drops you
 # into your shell instantly. To pull the latest config from inside a
-# running container:  home-manager switch --flake github:anishalle/nix#ani-container
+# running container:  home-manager switch --flake github:anishalle/nix#ani-container-amd64 (or -arm64)
 FROM nixos/nix:latest
+
+# amd64 / arm64 — auto-populated by BuildKit, matches the flake attr names
+ARG TARGETARCH
 
 RUN { \
       echo "experimental-features = nix-command flakes"; \
@@ -25,6 +29,6 @@ COPY . /root/nix
 # config at build time so `docker run` starts fully set up.
 RUN nix-env -e coreutils-full wget git-minimal man-db && \
     export USER=root HOME=/root && \
-    "$(nix build --no-link --print-out-paths /root/nix#homeConfigurations.ani-container.activationPackage)/activate"
+    "$(nix build --no-link --print-out-paths "/root/nix#homeConfigurations.ani-container-${TARGETARCH}.activationPackage")/activate"
 
 ENTRYPOINT ["/root/nix/docker/entrypoint.sh"]

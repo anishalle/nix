@@ -6,7 +6,7 @@ One flake, every machine.
 |---|---|---|
 | `homeConfigurations.ani` | macOS (standalone home-manager) | `home-manager switch --flake .#ani` |
 | `homeConfigurations.ani-linux-x86` / `-arm` | generic Linux devboxes (non-NixOS) | `home-manager switch --flake .#ani-linux-x86` |
-| `homeConfigurations.ani-container` | the Docker devbox image (runs as root) | baked in by `Dockerfile` |
+| `homeConfigurations.ani-container-amd64` / `-arm64` | the Docker devbox image (runs as root, multi-arch) | baked in by `Dockerfile` |
 | `nixosConfigurations.wsl` | NixOS-WSL: full system + home-manager as a NixOS module | `sudo nixos-rebuild switch --flake .#wsl` (alias: `update`) |
 
 The repo lives at `~/nix` on every machine. On macOS,
@@ -44,7 +44,7 @@ Config is pre-baked at image build for instant start. To sync a running
 container to the latest pushed config:
 
 ```sh
-home-manager switch --flake github:anishalle/nix#ani-container
+home-manager switch --flake github:anishalle/nix#ani-container-amd64   # or -arm64
 ```
 
 ## Flake gotcha
