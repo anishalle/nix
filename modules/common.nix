@@ -52,7 +52,6 @@
     ### misc
     ffmpeg
     graphviz
-    iverilog # icarus-verilog
     jadx
     openconnect
     opencode
