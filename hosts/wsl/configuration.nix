@@ -23,6 +23,10 @@
   # For building/testing the devbox image locally.
   virtualisation.docker.enable = true;
 
+  # Run foreign (FHS-expecting) binaries: pip wheels, npm postinstalls,
+  # VSCode remote server, downloaded tarballs, etc.
+  programs.nix-ld.enable = true;
+
   # Home Manager as a NixOS module: home.username / home.homeDirectory
   # are derived from users.users.ani automatically, and
   # `nixos-rebuild switch` updates system + home in one atomic step.
