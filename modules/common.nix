@@ -124,6 +124,9 @@
       github = {
         user = "anishalle";
       };
+      # ~/.config/git/config is read-only under home-manager, so
+      # `gh auth setup-git` can't write this itself: declare it instead.
+      credential."https://github.com".helper = "!gh auth git-credential";
     };
   };
 
