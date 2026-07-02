@@ -9,6 +9,15 @@ One flake, every machine.
 | `homeConfigurations.ani-container` | the Docker devbox image (runs as root) | baked in by `Dockerfile` |
 | `nixosConfigurations.wsl` | NixOS-WSL: full system + home-manager as a NixOS module | `sudo nixos-rebuild switch --flake .#wsl` (alias: `update`) |
 
+The repo lives at `~/nix` on every machine. On macOS,
+`~/.config/home-manager` is a symlink to it so arg-less
+`home-manager switch` (the `update` alias) keeps working:
+
+```sh
+git clone git@github.com:anishalle/nix.git ~/nix
+ln -s ~/nix ~/.config/home-manager   # macOS only
+```
+
 ## Layout
 
 ```
