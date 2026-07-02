@@ -1,0 +1,44 @@
+# nix
+
+One flake, every machine.
+
+| Target | What | Apply with |
+|---|---|---|
+| `homeConfigurations.ani` | macOS (standalone home-manager) | `home-manager switch --flake .#ani` |
+| `homeConfigurations.ani-linux-x86` / `-arm` | generic Linux devboxes (non-NixOS) | `home-manager switch --flake .#ani-linux-x86` |
+| `homeConfigurations.ani-container` | the Docker devbox image (runs as root) | baked in by `Dockerfile` |
+| `nixosConfigurations.wsl` | NixOS-WSL: full system + home-manager as a NixOS module | `sudo nixos-rebuild switch --flake .#wsl` (alias: `update`) |
+
+## Layout
+
+```
+flake.nix                  targets above
+modules/common.nix         cross-platform home config (packages, zsh, git, direnv, starship)
+modules/darwin.nix         mac-only
+modules/linux.nix          generic-linux-only (targets.genericLinux; NOT used on NixOS)
+hosts/wsl/configuration.nix  NixOS-WSL system config (user ani, docker, sudo, flakes)
+Dockerfile + docker/       ghcr devbox image
+.github/workflows/         builds & pushes ghcr.io/anishalle/devbox on push to master
+```
+
+On WSL, `home.username` / `home.homeDirectory` are derived automatically from
+the NixOS user — only darwin.nix / linux.nix hardcode home paths, for the
+standalone home-manager targets.
+
+## Docker devbox
+
+```sh
+docker run -it ghcr.io/anishalle/devbox
+```
+
+Config is pre-baked at image build for instant start. To sync a running
+container to the latest pushed config:
+
+```sh
+home-manager switch --flake github:anishalle/nix#ani-container
+```
+
+## Flake gotcha
+
+New files must be `git add`ed before nix can see them, or you get
+"path does not exist" during rebuild.

@@ -103,13 +103,10 @@
 
     plugins = [
       {
+        # from nixpkgs: pinned by the flake lock, no hash to chase when
+        # upstream's main branch moves
         name = "zsh-autocomplete";
-        src = pkgs.fetchFromGitHub {
-          owner = "marlonrichert";
-          repo = "zsh-autocomplete";
-          rev = "main";
-          hash = "sha256-998rYEyYD67XleSDbqvnQptRrGuG2N2AgFvTpFWvoV8=";
-        };
+        src = "${pkgs.zsh-autocomplete}/share/zsh-autocomplete";
       }
     ];
   };

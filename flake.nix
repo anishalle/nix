@@ -8,9 +8,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, nixos-wsl, ... }:
     let
       mkHome = system: modules:
         home-manager.lib.homeManagerConfiguration {
@@ -34,6 +38,28 @@
         "ani-linux-arm" = mkHome "aarch64-linux" [
           ./modules/common.nix
           ./modules/linux.nix
+        ];
+
+        # Docker devbox image (see Dockerfile): runs as root in the container.
+        "ani-container" = mkHome "x86_64-linux" [
+          ./modules/common.nix
+          ./modules/linux.nix
+          ({ lib, ... }: {
+            home.username = lib.mkForce "root";
+            home.homeDirectory = lib.mkForce "/root";
+          })
+        ];
+      };
+
+      # WSL NixOS: `sudo nixos-rebuild switch --flake .#wsl`
+      # Home Manager runs as a NixOS module here (see hosts/wsl),
+      # so system + home update together atomically.
+      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          nixos-wsl.nixosModules.default
+          home-manager.nixosModules.home-manager
+          ./hosts/wsl/configuration.nix
         ];
       };
     };
