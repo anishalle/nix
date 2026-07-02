@@ -6,6 +6,15 @@
 {
   home.homeDirectory = "/Users/ani";
 
+  # Workstation-only tools the devbox doesn't need.
+  home.packages = with pkgs; [
+    ### java / android RE (pairs with IDA)
+    maven
+    jadx
+    ### cloud / infra driven from the workstation
+    cloudflared
+  ];
+
   programs.zsh.initContent = lib.mkBefore ''
     export PATH="/Applications/IDA Professional 9.3.app/Contents/MacOS:$PATH"
   '';

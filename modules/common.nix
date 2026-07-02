@@ -35,24 +35,20 @@
     ### languages / toolchains
     go
     gopls
-    maven
 
-    ### build tools
+    ### cloud / infra
+    rclone
+
+
+    ### C build toolchain (per-project shells cover this remotely)
     cmake
     meson
     automake
     texinfo
 
-    ### cloud / infra
-    awscli2
-    cloudflared
-    rclone
-    localstack
-
     ### misc
     ffmpeg
     graphviz
-    jadx
     openconnect
     opencode
   ];
@@ -67,7 +63,13 @@
     enable = true;
     enableZshIntegration = true;
   };
-  xdg.configFile."starship.toml".source = ../starship.toml;
+  xdg.configFile."starship.toml".source = ../configs/starship.toml;
+
+  # Out-of-store symlink: ~/.config/nvim -> ~/nix/configs/nvim stays writable,
+  # so LazyVim can update lazy-lock.json/lazyvim.json in place and edits apply
+  # without a rebuild. Relies on the repo living at ~/nix on every machine.
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/configs/nvim";
 
   programs.zsh = {
     enable = true;
@@ -99,6 +101,7 @@
       cr = "cargo run";
       update = "home-manager switch";
       claude = "claude --dangerously-skip-permissions";
+      codex = "codex --yolo";
     };
 
     plugins = [
